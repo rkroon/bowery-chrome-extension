@@ -108,14 +108,6 @@ function saveBackgroundColor(url, color) {
   chrome.storage.sync.set(items);
 }
 
-function showContent(data, sender, sendResponse) {
-  const dataPresenter = document.getElementById('saved_data');
-
-  dataPresenter.innerText = JSON.stringify(data);
-
-  sendResponse();
-
-} 
 // This extension loads the saved background color for the current tab if one
 // exists. The user can select a new background color from the dropdown for the
 // current page, and it will be saved as part of the extension's isolated
@@ -128,12 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
   getCurrentTabUrl((url) => {
     var btnGetData = document.getElementById('btn-get-data');
 
-    // Ensure the background color is changed and saved when the dropdown
-    // selection changes.
     btnGetData.addEventListener('click', () => {
       getDataFromLocalStorage();
     });
-
-    chrome.runtime.onMessage.addListener(showContent)
   });
 });

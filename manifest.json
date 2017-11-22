@@ -22,5 +22,8 @@
       "js": ["jquery.min.js", "scrape.data.js"],
       "run_at": "document_idle"
     }
-  ]
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  }
 }
