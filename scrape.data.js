@@ -1,52 +1,114 @@
-function getCurrentTabUrl(callback) {
-  // Query filter to be passed to chrome.tabs.query - see
-  // https://developer.chrome.com/extensions/tabs#method-query
-  var queryInfo = {
-    active: true,
-    currentWindow: true
+const QUERY_OBJECT = {
+  address: { sel: '.backend_data' },
+  imageUrl: { sel: '#carousel .image-gallery .item .first-img', attr: 'src' },
+  price: { sel: '.details_info_price > .price' },
+  neighborhood: { sel: '.details:first > .details_info:last > span > a' },
+  unitType: { sel: '.details:first > .details_info:last > span:first' },
+  sqft: { sel: '.details:first > .details_info > span.first_detail_cell' },
+  rooms: { sel: '.details:first > .details_info > span:nth-child(3)' },
+  bedrooms: { sel: '.details:first > .details_info > span:nth-child(4)' },
+  bathrooms: { sel: '.details:first > .details_info > span:nth-child(5)' },
+}
+
+const cleanAddress = function (dirtyString) {
+  return dirtyString.replace(/(\r\n|\n|\r|(  ))/gm, "").trim();
+};
+
+const cleanPrice = function (dirtyString) {
+  cleanerString = dirtyString.replace('for rent', '');
+  cleanerString = cleanerString.replace(/(\r\n|\n|\r|(  ))/gm, "").trim();
+  cleanerString = cleanerString.replace('↓$', '');
+  cleanerString = cleanerString.replace('↑$', '');
+  cleanerString = cleanerString.replace(',', '');
+  const value = parseInt(cleanerString, 10);
+  return value;
+};
+
+const cleanSqft = function (dirtyString) {
+  return parseInt(dirtyString.replace(' ft²', '').replace(',', ''), 10);
+};
+
+const cleanRooms = function (dirtyString) {
+  const clearString = dirtyString ? dirtyString.replace('rooms', '').trim() : '';
+  return parseInt(clearString, 10);
+};
+
+const cleanBedrooms = function (dirtyString) {
+  const clearString = dirtyString ? dirtyString.replace('beds', '').replace('bed', '').trim() : '';
+  return parseInt(clearString, 10);
+};
+
+const cleanBathrooms = function (dirtyString) {
+  const clearString = dirtyString ? dirtyString.replace('baths', '').replace('bath', '').trim() : '';
+  console.log('Bathrooms: ', clearString);
+  return parseFloat(clearString);
+};
+
+function scapPageByQuery(queryObject) {
+  let scapObject = {};
+  if (queryObject) {
+    Object.keys(queryObject).forEach((paramKey) => {
+      const selector = queryObject[paramKey].sel;
+      const attribute = queryObject[paramKey].attr;
+      if (!attribute) {
+        scapObject[paramKey] = $(selector).first().text();
+      } else {
+        scapObject[paramKey] = $(selector).first().attr(attribute);
+      }
+    });
+  }
+
+  return scapObject;
+}
+
+function cleanupResult(scrapeResult) {
+  const result = {
+    'URI': document.location.toString(),
+    'Unit Type': scrapeResult.unitType,
+    'Price': cleanPrice(scrapeResult.price),
+    'Status': '',
+    'Neighborhood': scrapeResult.neighborhood,
+    'Level One Area': '',
+    'Level Two Area': '',
+    'Address': cleanAddress(scrapeResult.address),
+    'Unit': '',
+    'City': '',
+    'ZIP': '',
+    'State': '',
+    'Building': '',
+    'Sqft': cleanSqft(scrapeResult.sqft),
+    'Bedrooms': cleanBedrooms(scrapeResult.bedrooms),
+    'Baths': cleanBathrooms(scrapeResult.bathrooms),
+    'Total Rooms': cleanRooms(scrapeResult.rooms),
+    'Maintenance': '',
+    'Taxes': '',
+    'Created At': '',
+    'Closed At': '',
+    'Days on Market': '',
+    'Source': '',
+    'Listing Agent Names': '',
+    'Closing Price': '',
+    'Tax Abatement Type': '',
+    'Tax Abatement Expiration': '',
+    imageUrl: scrapeResult.imageUrl
   };
 
-  chrome.tabs.query(queryInfo, (tabs) => {
-    // chrome.tabs.query invokes the callback with a list of tabs that match the
-    // query. When the popup is opened, there is certainly a window and at least
-    // one tab, so we can safely assume that |tabs| is a non-empty array.
-    // A window can only have one active tab at a time, so the array consists of
-    // exactly one tab.
-    var tab = tabs[0];
-
-    // A tab is a plain object that provides information about the tab.
-    // See https://developer.chrome.com/extensions/tabs#type-Tab
-    var url = tab.url;
-
-    // tab.url is only available if the "activeTab" permission is declared.
-    // If you want to see the URL of other tabs (e.g. after removing active:true
-    // from |queryInfo|), then the "tabs" permission is required to see their
-    // "url" properties.
-    console.assert(typeof url == 'string', 'tab.url should be a string');
-
-    callback(url);
-  });
-
-  // Most methods of the Chrome extension APIs are asynchronous. This means that
-  // you CANNOT do something like this:
-  //
-  // var url;
-  // chrome.tabs.query(queryInfo, (tabs) => {
-  //   url = tabs[0].url;
-  // });
-  // alert(url); // Shows "undefined", because chrome.tabs.query is async.
+  return result;
 }
+
 
 
 function test() {
   //$('.Container').css('background-color', 'red');
-  console.log('tested!!!', chrome.runtime);
+  console.log('test runned!!!');
 
   const url = window.location.href;
-  console.log('url', url);
   const postedData = {};
-  postedData[url] = { testData: 'test updated' };
+  const scrapedData = scapPageByQuery(QUERY_OBJECT);
+  const data = cleanupResult(scrapedData);
+  postedData[url] = data;
   chrome.storage.sync.set(postedData);
+
   console.log('Posted data', postedData);
 }
 

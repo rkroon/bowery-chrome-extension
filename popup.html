@@ -5,41 +5,49 @@
  value "popup.html".
  -->
 <html>
-  <head>
-    <title>Getting Started Extension's Popup</title>
-    <style type="text/css">
-      body {
-        margin: 10px;
-        white-space: nowrap;
-      }
 
-      h1 {
-        font-size: 15px;
-      }
+<head>
+  <title>Bowery get data popup</title>
+  <style type="text/css">
+    body {
+      margin: 10px;
+      white-space: nowrap;
+    }
 
-      #container {
-        align-items: center;
-        display: flex;
-        justify-content: space-between;
-      }
-    </style>
+    h1 {
+      font-size: 15px;
+    }
 
-    <!--
+    #container {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #saved_data {
+      max-width: 300px;
+      word-wrap: break-word;
+    }
+  </style>
+
+  <!--
       - JavaScript and HTML must be in separate files: see our Content Security
       - Policy documentation[1] for details and explanation.
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
     -->
-    <script src="popup.js"></script>
-  </head>
+  <script src="popup.js"></script>
+</head>
 
-  <body>
-    <h3>Get Data from localstorage</h3>
-    <div id="container">
-      <p id="saved_data"></p>
-    </div>
-    <div>
-      <button id="btn-get-data">Get Data</button>
-    </div>
-  </body>
+<body>
+  <h3>Get Data from localstorage</h3>
+  <div id="container">
+    <p id="saved_data"></p>
+  </div>
+  <div>
+    <button id="btn-get-data">Get Data</button>
+    <button id="btnSendData">Send data</button>
+  </div>
+</body>
+
 </html>
