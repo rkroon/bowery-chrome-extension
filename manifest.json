@@ -18,8 +18,8 @@
   ],
   "content_scripts": [
     {
-      "matches": ["https://*/*", "http://*/**"],
-      "js": ["jquery.min.js"],
+      "matches": ["https://streeteasy.com/building/*/**"],
+      "js": ["jquery.min.js", "scrape.data.js"],
       "run_at": "document_idle"
     }
   ],
