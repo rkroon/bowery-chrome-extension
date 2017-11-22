@@ -19,7 +19,7 @@
   "content_scripts": [
     {
       "matches": ["https://*/*", "http://*/**"],
-      "js": ["jquery.min.js", "scrape.data.js"],
+      "js": ["jquery.min.js"],
       "run_at": "document_idle"
     }
   ],
