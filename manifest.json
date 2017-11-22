@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+
+  "name": "Bowery chrome extension",
+  "description": "This extension allows the user to do some stuff with pages",
+  "version": "1.0",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "chrome://favicon/"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://*/*", "http://*/**"],
+      "js": ["jquery.min.js", "scrape.data.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
