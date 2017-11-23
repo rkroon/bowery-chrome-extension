@@ -24,6 +24,6 @@
     }
   ],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["jquery.min.js","background.js"]
   }
 }
