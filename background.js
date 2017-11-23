@@ -32,20 +32,7 @@ function openURLInTab(loginPageUrl) {
     });
   };
 
-  // if (openedWindowId) {
-  //   chrome.windows.update(openedWindowId, { "focused": true });
-  // } else if (loginPageUrl) {
-  //   var loginPageTab = formTabQueryInfo(loginPageUrl, true);
-  //   chrome.tabs.query(loginPageTab, function (tabsArray) {
-  //     if (tabsArray && tabsArray[0]) {
-  //       tabsArray.forEach(function (tab) {
-  //         chrome.windows.remove(tab.windowId, function () {
-  //         });
-  //       });
-  //     }
   chromeWindowsCreateNewPopup();
-  //   });
-  // }
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendRespone) => {
