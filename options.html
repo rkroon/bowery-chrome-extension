@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Bowery Extension Options</title>
+  <style>
+    body {
+      font-size: 15px;
+      margin: 10px;
+    }
+    input {
+      margin-left: 10px;
+      position: relative;
+    }
+  </style>
+</head>
+
+<body>
+  <form id="settingsForm">
+    <fieldset>
+      <legend>Extension settings</legend>
+      <div>
+        <label for="login-url">Login url:</label>
+        <input id="login-url" type="text" placeholder="Enter login url here" required/>
+      </div>
+      <div>
+        <label for="api-url">API url:</label>
+        <input id="api-url" type="text" placeholder="Enter api endpoint here" required/>
+      </div>
+      <div id="status"></div>
+      <div>
+        <button type="submit">Save</button>
+      </div>
+    </fieldset>
+  </form>
+  <script src="jquery.min.js"></script>
+  <script src="options.js"></script>
+</body>
+
+</html>

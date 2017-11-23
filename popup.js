@@ -1,7 +1,11 @@
 // Copyright (c) 2014 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
+let settings = {};
+const DEFAULT_SETTINGS = {
+  loginUrl: 'http://localhost:8080/#!/login-extension',
+  apiUrl: 'http://localhost:8080/api/extension/import',
+}
 /**
  * Get the current URL.
  *
@@ -54,22 +58,22 @@ function executeContentScript() {
 }
 
 function logintoApplication() {
-  const loginUrl = 'http://localhost:8080/#!/login-extension';
-  chrome.runtime.sendMessage({url: loginUrl }, function (response) {
+  const loginUrl = settings.loginUrl || DEFAULT_SETTINGS.loginUrl;
+  chrome.runtime.sendMessage({ url: loginUrl }, function (response) {
     $('#log').text(JSON.stringify(response));
   });
-    // chrome.identity.launchWebAuthFlow(
-    //   { 'url': 'http://localhost:8080/#!/login', 'interactive': true },
-    //   function (redirect_url) {
-    //     /* Extract token from redirect_url */
-    //     alert(redirect_url);
-    //   });
+  // chrome.identity.launchWebAuthFlow(
+  //   { 'url': 'http://localhost:8080/#!/login', 'interactive': true },
+  //   function (redirect_url) {
+  //     /* Extract token from redirect_url */
+  //     alert(redirect_url);
+  //   });
 }
 
 function sendDataToApi() {
   const testData = {
     Address: "Dumbo Lofts 65 Washington Street Brooklyn, NY 11201",
-    Baths:    2,
+    Baths: 2,
     Bedrooms: 2,
     Neighborhood: "DUMBO",
     Price: 4510,
@@ -81,24 +85,41 @@ function sendDataToApi() {
     imageUrl: "https://cdn-img-feed.streeteasy.com/nyc/image/43/288252243.jpg",
   };
 
-  chrome.runtime.sendMessage({data: testData}, function(response) {
+  chrome.runtime.sendMessage({ data: testData }, function (response) {
     $('#log').first().text(JSON.stringify(response));
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  var btnGetData = document.getElementById('btn-get-data');
-  btnGetData.addEventListener('click', () => {
+function init() {
+  const btnGetData = $('#btn-get-data');
+  btnGetData.click(() => {
     executeContentScript();
-  });
-
-  const btnLogin = document.getElementById('btn-login');
-  btnLogin.addEventListener('click', () => {
-    logintoApplication();
-  });
-
-  const btnSendData = document.getElementById('btn-send-data');
-  btnSendData.addEventListener('click', () => {
-    sendDataToApi();
   })
+
+  const btnLogin = $('#btn-login');
+  btnLogin.click(() => {
+    logintoApplication();
+  })
+
+  const btnSendData = $('#btn-send-data');
+  btnSendData.click(() => {
+    sendDataToApi();
+  });
+}
+
+function loadSettings() {
+    // Use default values blank strings
+    chrome.storage.sync.get({
+      loginUrl: DEFAULT_SETTINGS.loginUrl,
+      apiUrl: DEFAULT_SETTINGS.apiUrl,
+    }, function(items) {
+      settings = items;
+    });
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadSettings();
+  init();
 });
+
