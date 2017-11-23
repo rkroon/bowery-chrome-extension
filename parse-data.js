@@ -1,4 +1,4 @@
-(($) => {
+(($, document) => {
   const getSelectors = () => {
     const staticSelectors = {
       address: {
@@ -94,11 +94,31 @@
         }
       });
     });
+
+    scrapeResult.url = document.location.toString();
     return scrapeResult;
   };
 
   const loadToServer = (result) => {
+    const POST_DATA_URL = 'http://localhost:8080/api/rent-comparables/upload/extension';
     console.log(result);
+    /* todo test carefully
+     $.ajax({
+     type: "POST",
+     url: POST_DATA_URL,
+     data: result,
+     })
+     todo add another done and fail
+     .done((data, status) => {
+     console.log("Data", data);
+     console.log("Status", status);
+     sendRespone({ data: data, status: status });
+     })
+     .fail((jqXHR, status, errorThrown) => {
+     console.error('Error:', status);
+     console.error('Thrown:', errorThrown);
+     sendRespone({ error: status, message: errorThrown });
+     });*/
   };
   const init = function () {
     const result = scrapePage();
@@ -107,4 +127,4 @@
   };
 
   init();
-})(jQuery);
+})(jQuery, document);
