@@ -19,12 +19,12 @@
   "content_scripts": [
     {
       "matches": ["https://streeteasy.com/building/*/**"],
-      "js": ["jquery.min.js", "scrape.data.js"],
+      "js": ["jquery.min.js"],
       "run_at": "document_idle"
     }
   ],
   "background": {
-    "scripts": ["jquery.min.js","background.js"]
+    "scripts": ["jquery.min.js"]
   },
   "options_page": "options.html"
 }
