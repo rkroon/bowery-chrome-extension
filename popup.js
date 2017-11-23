@@ -66,6 +66,26 @@ function logintoApplication() {
     //   });
 }
 
+function sendDataToApi() {
+  const testData = {
+    Address: "Dumbo Lofts 65 Washington Street Brooklyn, NY 11201",
+    Baths:    2,
+    Bedrooms: 2,
+    Neighborhood: "DUMBO",
+    Price: 4510,
+    Sqft: 909,
+    "Total Rooms": 4,
+    URI: "https://streeteasy.com/building/dumbo-lofts/5d?featured=1",
+    Unit: "",
+    "Unit Type": "Rental Unit",
+    imageUrl: "https://cdn-img-feed.streeteasy.com/nyc/image/43/288252243.jpg",
+  };
+
+  chrome.runtime.sendMessage({data: testData}, function(response) {
+    $('#log').first().text(JSON.stringify(response));
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   var btnGetData = document.getElementById('btn-get-data');
   btnGetData.addEventListener('click', () => {
@@ -76,4 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
   btnLogin.addEventListener('click', () => {
     logintoApplication();
   });
+
+  const btnSendData = document.getElementById('btn-send-data');
+  btnSendData.addEventListener('click', () => {
+    sendDataToApi();
+  })
 });

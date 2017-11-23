@@ -43,18 +43,37 @@ function openURLInTab(loginPageUrl) {
   //         });
   //       });
   //     }
-      chromeWindowsCreateNewPopup();
+  chromeWindowsCreateNewPopup();
   //   });
   // }
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendRespone) => {
-  console.log(sender.tab ?
-    "from a content script:" + sender.tab.url :
-    "from the extension");
-    const url = request.url;
+  const POST_DATA_URL = 'http://localhost:8080/api/extension/import';
+  const url = request.url;
   if (typeof url === 'string') {
     openURLInTab(url);
     sendResponse({ parsedUrl: request.url });
   }
+
+  const data = request.data;
+  if (data) {
+    $.ajax({
+      type: "POST",
+      url: POST_DATA_URL,
+      data: data,
+    })
+      .done((data, status) => {
+        console.log("Data", data);
+        console.log("Status", status);
+        sendRespone({ data: data, status: status });
+      })
+      .fail((jqXHR, status, errorThrown) => {
+        console.error('Error:', status);
+        console.error('Thrown:', errorThrown);
+        sendRespone({error: status, message: errorThrown});
+      });
+  }
+
+  return true;
 });
