@@ -31,13 +31,17 @@
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
     -->
+  <script src="jquery.min.js"></script>
   <script src="popup.js"></script>
 </head>
 
 <body>
   <h3>Get Data from localstorage</h3>
+  <button id="btn-login">Login</button>
   <div id="container">
     <p id="saved_data"></p>
+    <h4>Log info</h4>
+    <p id="log"></p>
   </div>
   <div>
     <button id="btn-get-data">Get Data</button>

@@ -47,18 +47,33 @@ function getCurrentTabUrl(callback) {
   // alert(url); // Shows "undefined", because chrome.tabs.query is async.
 }
 
-function getDataFromLocalStorage() {
+function executeContentScript() {
   chrome.tabs.executeScript(null, {
     file: 'parse-data.js',
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  getCurrentTabUrl((url) => {
-    var btnGetData = document.getElementById('btn-get-data');
+function logintoApplication() {
+  const loginUrl = 'http://localhost:8080/#!/login-extension';
+  chrome.runtime.sendMessage({url: loginUrl }, function (response) {
+    $('#log').text(JSON.stringify(response));
+  });
+    // chrome.identity.launchWebAuthFlow(
+    //   { 'url': 'http://localhost:8080/#!/login', 'interactive': true },
+    //   function (redirect_url) {
+    //     /* Extract token from redirect_url */
+    //     alert(redirect_url);
+    //   });
+}
 
-    btnGetData.addEventListener('click', () => {
-      getDataFromLocalStorage();
-    });
+document.addEventListener('DOMContentLoaded', () => {
+  var btnGetData = document.getElementById('btn-get-data');
+  btnGetData.addEventListener('click', () => {
+    executeContentScript();
+  });
+
+  const btnLogin = document.getElementById('btn-login');
+  btnLogin.addEventListener('click', () => {
+    logintoApplication();
   });
 });
