@@ -1,27 +1,45 @@
 (($) => {
-  const selectors = {
-    address: { sel: '.backend_data' },
-    imageUrl: { sel: '#carousel .image-gallery .item .first-img', attr: 'src' },
-    price: { sel: '.details_info_price > .price' },
-    neighborhood: { sel: '.details:first > .details_info:last > span > a' },
-    unitType: { sel: '.details:first > .details_info:last > span:first' },
-    sqft: { sel: '.details:first > .details_info > span.first_detail_cell' },
-    rooms: { sel: '.details:first > .details_info > span:nth-child(3)' },
-    bedrooms: { sel: '.details:first > .details_info > span:nth-child(4)' },
-    bathrooms: { sel: '.details:first > .details_info > span:nth-child(5)' },
-  };
+  const getSelectors = () => {
+    const staticSelectors = {
+      address: {
+        sel: '.backend_data',
+        parse: value => cleanAddress(value),
+      },
+      imageUrl: {
+        sel: '#carousel .image-gallery .item .first-img',
+        attr: 'src',
+        parse: value => value,
+      },
+      price: {
+        sel: '.details_info_price > .price',
+        parse: value => cleanIntNumber(value),
+      },
+      neighborhood: {
+        sel: '.details:first > .details_info:last > span > a',
+        parse: value => value,
+      },
+      unitType: {
+        sel: '.details:first > .details_info:last > span:first',
+        parse: value => value,
+      },
 
-  const scrapePage = () => {
-    const scrapeResult = {};
-    Object.keys(selectors).forEach((key) => {
-      const selector = selectors[key];
-      if (selector.attr) {
-        scrapeResult[key] = $(selector.sel).attr(selector.attr);
-      } else {
-        scrapeResult[key] = $(selector.sel).text();
-      }
-    });
-    return scrapeResult;
+    };
+    const detailsSelector = {
+      sel: '.details:first > .details_info > span',
+      fields: {
+        sqft: { test: /ft/, parse: value => cleanIntNumber(value) },
+        rooms: { test: /room/, parse: value => cleanIntNumber(value) },
+        bedrooms: {
+          testArray: [
+            { test: /bed/, parse: value => cleanIntNumber(value) },
+            { test: /studio/, parse: value => 0 },
+          ],
+        },
+        bathrooms: { test: /bath/, parse: value => cleanIntNumber(value) },
+      },
+    };
+
+    return { staticSelectors, detailsSelector };
   };
 
   const cleanAddress = function (dirtyString) {
@@ -29,8 +47,8 @@
   };
 
   const cleanIntNumber = function (dirtyString) {
-    const filterNumbersDotsAndCommas = (str) => str.replace(/[^\d.,]/g, '');
-    const filterNumbers = (str) => str.replace(/[^\d]/g, '');
+    const filterNumbersDotsAndCommas = str => str.replace(/[^\d.,]/g, '');
+    const filterNumbers = str => str.replace(/[^\d.]/g, '');
 
     const trimmedString = filterNumbersDotsAndCommas(dirtyString);
     const numberString = filterNumbers(trimmedString);
@@ -38,24 +56,52 @@
     return Number(numberString);
   };
 
+  const scrapePage = () => {
+    const selectors = getSelectors();
+    const scrapeResult = {};
+    Object.keys(selectors.staticSelectors).forEach((key) => {
+      const selector = selectors.staticSelectors[key];
+      let value;
+      if (selector.attr) {
+        value = $(selector.sel).attr(selector.attr);
+      } else {
+        value = $(selector.sel).text();
+      }
+
+      scrapeResult[key] = selector.parse(value);
+    });
+    $(selectors.detailsSelector.sel).each(function (i, value) {
+      const item = $(value).text();
+      const fields = selectors.detailsSelector.fields;
+      Object.keys(fields).forEach((key) => {
+        if (!scrapeResult[key]) {
+          const testArray = fields[key].testArray;
+          if (!testArray) {
+            const test = fields[key].test;
+            const parse = fields[key].parse;
+            if (test.test(item)) {
+              scrapeResult[key] = parse(item);
+            }
+          } else {
+            testArray.forEach((arrayItem) => {
+              if (!scrapeResult[key]) {
+                if (arrayItem.test.test(item)) {
+                  scrapeResult[key] = arrayItem.parse(item);
+                }
+              }
+            });
+          }
+        }
+      });
+    });
+    return scrapeResult;
+  };
+
   const loadToServer = (result) => {
     console.log(result);
   };
   const init = function () {
-    const scrapeResult = scrapePage();
-
-    const result = {
-      url: document.location.toString(),
-      unitType: scrapeResult.unitType,
-      price: cleanIntNumber(scrapeResult.price),
-      neighborhood: scrapeResult.neighborhood,
-      address: cleanAddress(scrapeResult.address),
-      sqft: cleanIntNumber(scrapeResult.sqft),
-      bedrooms: cleanIntNumber(scrapeResult.bedrooms),
-      bathrooms: cleanIntNumber(scrapeResult.bathrooms),
-      rooms: cleanIntNumber(scrapeResult.rooms),
-      imageUrl: scrapeResult.imageUrl
-    };
+    const result = scrapePage();
 
     loadToServer(result);
   };
