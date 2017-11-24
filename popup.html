@@ -7,47 +7,28 @@
 <html>
 
 <head>
-  <title>Bowery get data popup</title>
-  <style type="text/css">
-    body {
-      margin: 10px;
-      white-space: nowrap;
-    }
+    <title>Bowery get data popup</title>
+    <link rel="stylesheet" href="popup.css">
 
-    h1 {
-      font-size: 15px;
-    }
-
-    #container {
-      align-items: center;
-      display: flex;
-      justify-content: space-between;
-    }
-  </style>
-
-  <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
-    -->
-  <script src="jquery.min.js"></script>
-  <script src="popup.js"></script>
+    <!--
+        - JavaScript and HTML must be in separate files: see our Content Security
+        - Policy documentation[1] for details and explanation.
+        -
+        - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+      -->
+    <script src="jquery.min.js"></script>
+    <script src="popup.js"></script>
 </head>
 
 <body>
-  <h3>Bowery extension</h3>
-  <button id="btn-login">Login</button>
-  <div id="container">
-    <p id="saved_data"></p>
-  </div>
-  <h4>Log info</h4>
-  <div>
-    <p id="log"></p>
-  </div>
-  <div>
-    <button id="btn-get-data">Parse and Send Data</button>
-  </div>
+<h3>Bowery extension</h3>
+<div>
+    <button id="btn-login" class="btn">Login</button>
+</div>
+<br>
+<div>
+    <button id="btn-get-data" class="btn">Parse and Send Data</button>
+</div>
 </body>
 
 </html>
