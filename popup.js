@@ -3,8 +3,7 @@
 // found in the LICENSE file.
 let settings = {};
 const DEFAULT_SETTINGS = {
-  loginUrl: 'http://localhost:8080/#!/login-extension',
-  apiUrl: 'http://localhost:8080/api/extension/import',
+  domain: 'http://localhost:8080',
 };
 
 function executeContentScript() {
@@ -14,7 +13,7 @@ function executeContentScript() {
 }
 
 function loginApplication() {
-  const LOGIN_URL = 'http://localhost:8080/#!/login-extension';
+  const LOGIN_URL = '/#!/login-extension';
   const loginPageWidth = 470;
   const loginPageHeight = 624;
   const loginPageType = "popup";
@@ -27,7 +26,7 @@ function loginApplication() {
 
   let openedWindowId = 0;
   chrome.windows.create({
-    url: [LOGIN_URL],
+    url: [settings.domain + LOGIN_URL],
     type: loginPageType,
     width: loginPageWidth,
     height: loginPageHeight,
@@ -57,13 +56,13 @@ document.addEventListener('DOMContentLoaded', () => {
   btnLogin.addEventListener('click', () => {
     loginApplication();
   });
+  loadSettings();
 });
 
 function loadSettings() {
   // Use default values blank strings
   chrome.storage.sync.get({
-    loginUrl: DEFAULT_SETTINGS.loginUrl,
-    apiUrl: DEFAULT_SETTINGS.apiUrl,
+    domain: DEFAULT_SETTINGS.domain,
   }, function (items) {
     settings = items;
   });

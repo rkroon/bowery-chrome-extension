@@ -2,17 +2,15 @@
 function save_options(event) {
   event.preventDefault();
 
-  var loginUrl = document.getElementById('login-url').value;
-  var apiUrl = document.getElementById('api-url').value;
+  const domain = $('#domain-url').val();
   chrome.storage.sync.set({
-    loginUrl: loginUrl,
-    apiUrl: apiUrl
-  }, function() {
+    domain,
+  }, function () {
     // Update status to let user know options were saved.
-    var status = document.getElementById('status');
-    status.textContent = 'Settings saved.';
-    setTimeout(function() {
-      status.textContent = '';
+    $('#status').text('Settings saved.');
+
+    setTimeout(function () {
+      $('#status').text('');
     }, 2000);
   });
 }
@@ -22,14 +20,11 @@ function save_options(event) {
 function restore_options() {
   // Use default values localhost settings
   chrome.storage.sync.get({
-    loginUrl: 'http://localhost:8080/#!/login-extension',
-    apiUrl: 'http://localhost:8080/api/extension/import'
-  }, function(items) {
-    $('#login-url').val(items.loginUrl);
-    $('#api-url').val(items.apiUrl);
+    domain: 'http://localhost:8080',
+  }, function (items) {
+    $('#domain-url').val(items.domain);
   });
 
   $('#settingsForm').submit(save_options);
 }
-
-document.addEventListener('DOMContentLoaded', restore_options);
+$(document).ready(restore_options);
