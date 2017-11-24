@@ -15,11 +15,11 @@
         parse: value => cleanIntNumber(value),
       },
       neighborhood: {
-        sel: '.details:first > .details_info:last > span > a',
+        sel: '.details:first > .details_info > span.nobreak > a',
         parse: value => value,
       },
       unitType: {
-        sel: '.details:first > .details_info:last > span:first',
+        sel: '.details:first > .details_info > span.nobreak:first',
         parse: value => value,
       },
 
