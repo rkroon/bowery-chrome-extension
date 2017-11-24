@@ -102,23 +102,26 @@
   const loadToServer = (result) => {
     const POST_DATA_URL = 'http://localhost:8080/api/rent-comparables/upload/extension';
     console.log(result);
-    /* todo test carefully
-     $.ajax({
-     type: "POST",
-     url: POST_DATA_URL,
-     data: result,
-     })
-     todo add another done and fail
-     .done((data, status) => {
-     console.log("Data", data);
-     console.log("Status", status);
-     sendRespone({ data: data, status: status });
-     })
-     .fail((jqXHR, status, errorThrown) => {
-     console.error('Error:', status);
-     console.error('Thrown:', errorThrown);
-     sendRespone({ error: status, message: errorThrown });
-     });*/
+
+    $.ajax({
+      type: "POST",
+      url: POST_DATA_URL,
+      data: result,
+    })
+      .done((data, status) => {
+        console.log("Status", status);
+        if (data.error) {
+          console.log('Error occured, mesage:');
+          console.log(data.message);
+        } else {
+          console.log('Data was saved, saved item:');
+          console.log(data.saved);
+        }
+      })
+      .fail((jqXHR, status, errorThrown) => {
+        console.error('Error:', status);
+        console.error('Thrown:', errorThrown);
+      });
   };
   const init = function () {
     const result = scrapePage();
