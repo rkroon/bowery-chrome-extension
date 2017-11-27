@@ -5,8 +5,84 @@ let settings = {};
 const DEFAULT_SETTINGS = {
   domain: 'http://localhost:8080',
 };
+function showMessage(success = true) {
+  if (success) {
+    $('#msg-success').removeClass('hidden');
+    setTimeout(() => {
+      $('#msg-success').addClass('hidden');
+    }, 3000);
+    return;
+  }
+  $('#msg-error').removeClass('hidden');
+  setTimeout(() => {
+    $('#msg-error').addClass('hidden');
+  }, 3000);
+}
+function loadToServer(result) {
+  const POST_DATA_URL = '/api/rent-comparables/upload/extension';
+
+  $.ajax({
+    type: "POST",
+    url: settings.domain + POST_DATA_URL,
+    data: result,
+  })
+    .done((data, status) => {
+      console.log("Status", status);
+      if (data.error) {
+        console.log('Error occured, mesage:');
+        console.log(data.message);
+        showMessage(false);
+      } else {
+        console.log('Data was saved, saved item:');
+        console.log(data.saved);
+        showMessage(true);
+      }
+    })
+    .fail((jqXHR, status, errorThrown) => {
+      console.error('Error:', status);
+      console.error('Thrown:', errorThrown);
+      showMessage(false);
+    });
+}
+
+function fillForm(data) {
+  $('#btn-get-data').addClass('hidden');
+  $('#edit-data').removeClass('hidden');
+
+  $('#address').val(data.address);
+  $('#price').val(data.price);
+  $('#neighborhood').val(data.neighborhood);
+  $('#unit-type').val(data.unitType);
+  $('#sqft').val(data.sqft);
+  $('#rooms').val(data.rooms);
+  $('#bedrooms').val(data.bedrooms);
+  $('#bathrooms').val(data.bathrooms);
+
+  $('#btn-send-data').on('click', (e) => {
+    e.preventDefault();
+    const editedData = {
+      url: data.url,
+      imageUrl: data.imageUrl,
+      address: $('#address').val(),
+      neighborhood: $('#neighborhood').val(),
+      unitType: $('#unit-type').val(),
+      price: Number($('#price').val()),
+      sqft: Number($('#sqft').val()),
+      rooms: Number($('#rooms').val()),
+      bedrooms: Number($('#bedrooms').val()),
+      bathrooms: Number($('#bathrooms').val()),
+    };
+    console.log(editedData);
+    loadToServer(editedData);
+    $('#btn-get-data').removeClass('hidden');
+    $('#edit-data').addClass('hidden');
+  });
+}
 
 function executeContentScript() {
+  chrome.extension.onRequest.addListener(function (parsedData) {
+    fillForm(parsedData);
+  });
   chrome.tabs.executeScript(null, {
     file: 'parse-data.js',
   });
@@ -16,7 +92,7 @@ function loginApplication() {
   const LOGIN_URL = '/#!/login-extension';
   const loginPageWidth = 470;
   const loginPageHeight = 624;
-  const loginPageType = "popup";
+  const loginPageType = 'popup';
 
   let loginPageTop = (window.screen.height - loginPageHeight) / 2;
   let loginPageLeft = (window.screen.width - loginPageWidth) / 2;
@@ -34,7 +110,7 @@ function loginApplication() {
     top: loginPageTop
   }, function (createdWindow) {
     if (createdWindow) {
-      console.log("Opened window with id", createdWindow.id);
+      console.log('Opened window with id', createdWindow.id);
       openedWindowId = createdWindow.id;
       chrome.windows.onRemoved.addListener(function (removedId) {
         if (removedId === openedWindowId) {

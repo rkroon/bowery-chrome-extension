@@ -9,13 +9,6 @@
 <head>
     <title>Bowery get data popup</title>
     <link rel="stylesheet" href="popup.css">
-
-    <!--
-        - JavaScript and HTML must be in separate files: see our Content Security
-        - Policy documentation[1] for details and explanation.
-        -
-        - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
-      -->
     <script src="jquery.min.js"></script>
     <script src="popup.js"></script>
 </head>
@@ -27,7 +20,42 @@
 </div>
 <br>
 <div>
-    <button id="btn-get-data" class="btn">Parse and Send Data</button>
+    <button id="btn-get-data" class="btn">Parse Data</button>
+</div>
+<div id="edit-data" class="hidden">
+    <form>
+        <div>
+            <label for="address">Address</label><br>
+            <input type="text" id="address" name="address">
+        </div>
+        <div>
+            <label for="address">Price ($)</label><br>
+            <input type="number" id="price" name="price"></div>
+        <div>
+            <label for="address">Neighborhood</label><br>
+            <input type="text" id="neighborhood" name="neighborhood"></div>
+        <div>
+            <label for="address">Unit type</label><br>
+            <input type="text" id="unit-type" name="unit-type"></div>
+        <div>
+            <label for="address">Square footage</label><br>
+            <input type="number" id="sqft" name="sqft"></div>
+        <div>
+            <label for="address">Rooms</label><br>
+            <input type="number" id="rooms" name="rooms"></div>
+        <div><label for="address">Bedrooms</label><br>
+            <input type="number" id="bedrooms" name="bedrooms"></div>
+        <div><label for="address">Bathrooms</label><br>
+            <input type="number" id="bathrooms" name="bathrooms">
+        </div>
+        <div><br><input type="submit" id="btn-send-data" class="btn" value="Load to server"></div>
+    </form>
+</div>
+<div id="msg-success" class="hidden">
+    <p class="success">Success</p>
+</div>
+<div id="msg-error" class="hidden">
+    <p class="error">Something went wrong. Try again later.</p>
 </div>
 </body>
 

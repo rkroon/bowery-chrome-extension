@@ -2,7 +2,7 @@
   const getSelectors = () => {
     const staticSelectors = {
       address: {
-        sel: '.backend_data',
+        sel: '.backend_data > .subtitle',
         parse: value => cleanAddress(value),
       },
       imageUrl: {
@@ -99,34 +99,9 @@
     return scrapeResult;
   };
 
-  const loadToServer = (result) => {
-    const POST_DATA_URL = 'http://localhost:8080/api/rent-comparables/upload/extension';
-    console.log(result);
-
-    $.ajax({
-      type: "POST",
-      url: POST_DATA_URL,
-      data: result,
-    })
-      .done((data, status) => {
-        console.log("Status", status);
-        if (data.error) {
-          console.log('Error occured, mesage:');
-          console.log(data.message);
-        } else {
-          console.log('Data was saved, saved item:');
-          console.log(data.saved);
-        }
-      })
-      .fail((jqXHR, status, errorThrown) => {
-        console.error('Error:', status);
-        console.error('Thrown:', errorThrown);
-      });
-  };
   const init = function () {
     const result = scrapePage();
-
-    loadToServer(result);
+    chrome.extension.sendRequest(result);
   };
 
   init();
