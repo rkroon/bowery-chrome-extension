@@ -1,6 +1,10 @@
 (($, document) => {
   const getSelectors = () => {
     const staticSelectors = {
+      unit: {
+        sel: '.building-title .incognito',
+        parse: value => cleanUnit(value),
+      },
       address: {
         sel: '.backend_data > .subtitle',
         parse: value => cleanAddress(value),
@@ -42,6 +46,13 @@
     return { staticSelectors, detailsSelector };
   };
 
+  const cleanUnit = function (dirtyString) {
+    const cleanString = dirtyString.replace(/(\r\n|\n|\r|(  ))/gm, "").trim();
+    const parts = cleanString.split('#');
+    if (parts[1]) {
+      return '#' + parts[1];
+    }
+  };
   const cleanAddress = function (dirtyString) {
     return dirtyString.replace(/(\r\n|\n|\r|(  ))/gm, "").trim();
   };

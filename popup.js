@@ -48,21 +48,15 @@ function loadToServer(result) {
 function fillForm(data) {
   $('#btn-get-data').addClass('hidden');
   $('#edit-data').removeClass('hidden');
-
-  $('#address').val(data.address);
-  $('#price').val(data.price);
-  $('#neighborhood').val(data.neighborhood);
-  $('#unit-type').val(data.unitType);
-  $('#sqft').val(data.sqft);
-  $('#rooms').val(data.rooms);
-  $('#bedrooms').val(data.bedrooms);
-  $('#bathrooms').val(data.bathrooms);
+  Object.keys(data).forEach((key) => {
+    const item = data[key];
+    $(`#${key}`).val(item);
+  });
 
   $('#btn-send-data').on('click', (e) => {
     e.preventDefault();
-    const editedData = {
-      url: data.url,
-      imageUrl: data.imageUrl,
+    const editedData = Object.assign({}, data, {
+      unit: $('#unit').val(),
       address: $('#address').val(),
       neighborhood: $('#neighborhood').val(),
       unitType: $('#unit-type').val(),
@@ -71,7 +65,8 @@ function fillForm(data) {
       rooms: Number($('#rooms').val()),
       bedrooms: Number($('#bedrooms').val()),
       bathrooms: Number($('#bathrooms').val()),
-    };
+    });
+
     console.log(editedData);
     loadToServer(editedData);
     $('#btn-get-data').removeClass('hidden');
