@@ -33,6 +33,26 @@ h1 {
     background-color: #4e5d6c;
 }
 
+.btn-login {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 2px 4px;
+    font-size: 13px;
+    line-height: 1.22857143;
+    border-radius: 0;
+    -webkit-user-select: none;
+    user-select: none;
+    color: #ffffff;
+    background-color: #4e5d6c;
+}
+
 .btn:focus,
 .btn:active:focus,
 .btn.active:focus,
