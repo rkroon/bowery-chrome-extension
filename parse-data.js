@@ -9,6 +9,10 @@
         sel: '.backend_data > .subtitle',
         parse: value => cleanAddress(value),
       },
+      zip: {
+        sel: '.backend_data',
+        parse: value => getZip(value),
+      },
       imageUrl: {
         sel: '#carousel .image-gallery .item .first-img',
         attr: 'src',
@@ -55,6 +59,16 @@
   };
   const cleanAddress = function (dirtyString) {
     return dirtyString.replace(/(\r\n|\n|\r|(  ))/gm, "").trim();
+  };
+  const getZip = function (dirtyString) {
+    const cleanString = dirtyString.replace(/(\r\n|\n|\r|(  ))/gm, "").trim();
+    let zip;
+    cleanString.split(' ').forEach((item) => {
+      if (Number(item)) {
+        zip = Number(item);
+      }
+    });
+    return zip;
   };
 
   const cleanIntNumber = function (dirtyString) {

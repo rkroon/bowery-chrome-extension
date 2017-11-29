@@ -58,6 +58,7 @@ function fillForm(data) {
     const editedData = Object.assign({}, data, {
       unit: $('#unit').val(),
       address: $('#address').val(),
+      zip: Number($('#zip').val()),
       neighborhood: $('#neighborhood').val(),
       unitType: $('#unit-type').val(),
       rent: Number($('#rent').val()),
@@ -79,8 +80,13 @@ function executeContentScript() {
     fillForm(parsedData);
   });
   chrome.tabs.executeScript(null, {
-    file: 'parse-data.js',
+    file: 'jquery.min.js',
+  }, () => {
+    chrome.tabs.executeScript(null, {
+      file: 'parse-data.js',
+    });
   });
+
 }
 
 function loginApplication() {
