@@ -14,7 +14,7 @@
         attr: 'src',
         parse: value => value,
       },
-      price: {
+      rent: {
         sel: '.details_info_price > .price',
         parse: value => cleanIntNumber(value),
       },

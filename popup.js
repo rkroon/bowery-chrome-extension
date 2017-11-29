@@ -60,7 +60,7 @@ function fillForm(data) {
       address: $('#address').val(),
       neighborhood: $('#neighborhood').val(),
       unitType: $('#unit-type').val(),
-      price: Number($('#price').val()),
+      rent: Number($('#rent').val()),
       sqft: Number($('#sqft').val()),
       rooms: Number($('#rooms').val()),
       bedrooms: Number($('#bedrooms').val()),
