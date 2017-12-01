@@ -59,6 +59,8 @@ function fillForm(data) {
   Object.keys(data).forEach((key) => {
     if (key === 'amenities') {
       generateAmenities(data[key]);
+    } else if (key === 'coords') {
+      $(`#${key}`).text(`Lat: ${data.coords.latitude}; Lng: ${data.coords.longitude}.`);
     } else {
       const item = data[key];
       $(`#${key}`).val(item);
@@ -80,10 +82,6 @@ function fillForm(data) {
       rooms: Number($('#rooms').val()),
       bedrooms: Number($('#bedrooms').val()),
       bathrooms: Number($('#bathrooms').val()),
-      coords: {
-        latitude: Number($('#latitude').val()),
-        longitude: Number($('#longitude').val()),
-      },
     });
 
     console.log(editedData);

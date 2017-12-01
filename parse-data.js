@@ -127,8 +127,9 @@
       const compData = dataLayer[0];
       // Get Info from Global variable dataLayer
       scrapeResult.borough = compData.listBoro;
-      scrapeResult.latitude = compData.listGeoLat;
-      scrapeResult.longitude = compData.listGeoLon;
+      scrapeResult.coords = {};
+      scrapeResult.coords.latitude = compData.listGeoLat;
+      scrapeResult.coords.longitude = compData.listGeoLon;
       scrapeResult.agent = compData.listAgent;
       scrapeResult.amenities = compData.listAmen.split('|');
     }
@@ -142,7 +143,7 @@
     if (dataLayerScript) {
       eval(dataLayerScript.text);
     }
-  }
+  };
 
   const init = function () {
     const result = scrapePage();
