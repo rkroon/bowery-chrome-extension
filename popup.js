@@ -68,7 +68,7 @@ function fillForm(data) {
   $('#btn-send-data').on('click', (e) => {
     e.preventDefault();
     const editedData = Object.assign({}, data, {
-      agent: $('#agent').val(),
+      listingAgentNames: $('#agent').val(),
       unit: $('#unit').val(),
       address: $('#address').val(),
       borough: $('#borough').val(),
@@ -80,8 +80,10 @@ function fillForm(data) {
       rooms: Number($('#rooms').val()),
       bedrooms: Number($('#bedrooms').val()),
       bathrooms: Number($('#bathrooms').val()),
-      latitude: Number($('#latitude').val()),
-      longtitude: Number($('#longtitude').val())
+      coords: {
+        latitude: Number($('#latitude').val()),
+        longtitude: Number($('#longtitude').val()),
+      },
     });
 
     console.log(editedData);
