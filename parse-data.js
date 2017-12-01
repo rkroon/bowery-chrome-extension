@@ -128,7 +128,7 @@
       // Get Info from Global variable dataLayer
       scrapeResult.borough = compData.listBoro;
       scrapeResult.latitude = compData.listGeoLat;
-      scrapeResult.longtitude = compData.listGeoLon;
+      scrapeResult.longitude = compData.listGeoLon;
       scrapeResult.agent = compData.listAgent;
       scrapeResult.amenities = compData.listAmen.split('|');
     }

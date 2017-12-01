@@ -82,7 +82,7 @@ function fillForm(data) {
       bathrooms: Number($('#bathrooms').val()),
       coords: {
         latitude: Number($('#latitude').val()),
-        longtitude: Number($('#longtitude').val()),
+        longitude: Number($('#longitude').val()),
       },
     });
 
