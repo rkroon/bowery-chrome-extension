@@ -79,3 +79,11 @@ h1 {
 .success {
 
 }
+
+.amenities {
+    margin: 0;
+    padding: 0 15px;
+ }
+.amenities li {
+   list-style-position: outside;
+}

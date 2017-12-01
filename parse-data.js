@@ -121,8 +121,28 @@
     });
 
     scrapeResult.url = document.location.toString();
+
+    findDataLayer();
+    if (dataLayer && dataLayer[0]) {
+      const compData = dataLayer[0];
+      // Get Info from Global variable dataLayer
+      scrapeResult.borough = compData.listBoro;
+      scrapeResult.latitude = compData.listGeoLat;
+      scrapeResult.longtitude = compData.listGeoLon;
+      scrapeResult.agent = compData.listAgent;
+      scrapeResult.amenities = compData.listAmen.split('|');
+    }
     return scrapeResult;
   };
+
+  const findDataLayer = () => {
+    const dataLayerScript = Array.prototype.find.call($('script'), (script) => {
+      return script.text.includes('dataLayer = [');
+    });
+    if (dataLayerScript) {
+      eval(dataLayerScript.text);
+    }
+  }
 
   const init = function () {
     const result = scrapePage();

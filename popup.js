@@ -45,19 +45,33 @@ function loadToServer(result) {
     });
 }
 
+function generateAmenities(amenities) {
+  const amenitiesTable = $('#amenities');
+  for (let i = 0; i < amenities.length; i++) {
+    amenitiesTable.append(`
+    <li>${amenities[i]}</li>`);
+  }
+}
+
 function fillForm(data) {
   $('#btn-get-data').addClass('hidden');
   $('#edit-data').removeClass('hidden');
   Object.keys(data).forEach((key) => {
-    const item = data[key];
-    $(`#${key}`).val(item);
+    if (key === 'amenities') {
+      generateAmenities(data[key]);
+    } else {
+      const item = data[key];
+      $(`#${key}`).val(item);
+    }
   });
 
   $('#btn-send-data').on('click', (e) => {
     e.preventDefault();
     const editedData = Object.assign({}, data, {
+      agent: $('#agent').val(),
       unit: $('#unit').val(),
       address: $('#address').val(),
+      borough: $('#borough').val(),
       zip: Number($('#zip').val()),
       neighborhood: $('#neighborhood').val(),
       unitType: $('#unit-type').val(),
@@ -66,6 +80,8 @@ function fillForm(data) {
       rooms: Number($('#rooms').val()),
       bedrooms: Number($('#bedrooms').val()),
       bathrooms: Number($('#bathrooms').val()),
+      latitude: Number($('#latitude').val()),
+      longtitude: Number($('#longtitude').val())
     });
 
     console.log(editedData);
