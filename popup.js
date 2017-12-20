@@ -53,12 +53,22 @@ function generateAmenities(amenities) {
   }
 }
 
+function generatePhotos(photos) {
+  const $photos = $('#photos');
+  for (let i = 0; i < photos.length; i++) {
+    $photos.append(`
+    <li><img src="${photos[i]}"/></li>`);
+  }
+}
+
 function fillForm(data) {
   $('#btn-get-data').addClass('hidden');
   $('#edit-data').removeClass('hidden');
   Object.keys(data).forEach((key) => {
     if (key === 'amenities') {
       generateAmenities(data[key]);
+    } else if (key === 'photos') {
+      generatePhotos(data[key]);
     } else if (key === 'coords') {
       $(`#${key}`).text(`Lat: ${data.coords.latitude}; Lng: ${data.coords.longitude}.`);
     } else {

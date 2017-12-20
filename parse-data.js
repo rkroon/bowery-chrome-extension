@@ -18,6 +18,12 @@
         attr: 'src',
         parse: value => value,
       },
+      photos: {
+        sel: '#image-gallery > li.item.photo.lslide',
+        multi: true,
+        attr: 'data-original',
+        parse: value => value,
+      },
       rent: {
         sel: '.details_info_price > .price',
         parse: value => cleanIntNumber(value),
@@ -87,7 +93,13 @@
     Object.keys(selectors.staticSelectors).forEach((key) => {
       const selector = selectors.staticSelectors[key];
       let value;
-      if (selector.attr) {
+      if (selector.multi) {
+        const valuesArr = [];
+        $(selector.sel).each(function () {
+          valuesArr.push($(this).attr(selector.attr));
+        });
+        value = valuesArr;
+      } else if (selector.attr) {
         value = $(selector.sel).attr(selector.attr);
       } else {
         value = $(selector.sel).text();

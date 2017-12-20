@@ -7,10 +7,17 @@ h1 {
     font-size: 15px;
 }
 
-#container {
-    align-items: center;
+.container {
+    align-items: top;
     display: flex;
     justify-content: space-between;
+}
+
+.container > .flex-item {
+    flex: auto;
+}
+.flex-item > h4 {
+  text-align: center;
 }
 
 .btn {
@@ -86,4 +93,18 @@ h1 {
  }
 .amenities li {
    list-style-position: outside;
+}
+
+.photos > li {
+  border: 1px solid #aaa;
+  margin: 1px;
+  padding: 1px;
+  display: flex;
+  list-style: none;
+}
+
+.photos > li > img {
+  width: auto;
+  max-height: 50px;
+  margin: auto;
 }
