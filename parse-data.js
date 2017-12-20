@@ -13,11 +13,6 @@
         sel: '.backend_data',
         parse: value => getZip(value),
       },
-      imageUrl: {
-        sel: '#carousel .image-gallery .item .first-img',
-        attr: 'src',
-        parse: value => value,
-      },
       photos: {
         sel: '#image-gallery > li.item.photo.lslide',
         multi: true,
