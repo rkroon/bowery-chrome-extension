@@ -14,7 +14,7 @@
         parse: value => getZip(value),
       },
       photos: {
-        sel: '#image-gallery > li.item.photo.lslide',
+        sel: '.image-gallery > li.item.photo.lslide',
         multi: true,
         attr: 'data-original',
         parse: value => value,
